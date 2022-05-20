@@ -2,6 +2,7 @@ const express =require('express');
 const router = express.Router();
 const postModel =require('../models/postModel');
 const successHandle=require('../service/successResponse');
+const httpStatus=require('../util/httpStatus');
 
 router.get('/',async function(req,res){
     try {
