@@ -14,13 +14,12 @@ router.get('/',async function(req,res){
 })
 
 router.post('/',async(req,res)=>{
-    req.on('end', async()=>{
+    
         try {
-            const data =JSON.parse(body);
+            const data = req.body;
             if (!data.articleContent) {
                 return appError(httpStatus.BAD_REQUEST, "文章內容為必填", next);
             }
-
             if(!data.userName){
                 return appError(httpStatus.BAD_REQUEST, "發文者為必填", next);
             }
@@ -37,27 +36,18 @@ router.post('/',async(req,res)=>{
         } catch (error) {
             return appError(httpStatus.BAD_REQUEST, "新增貼文錯誤", next);
         }
-    });     
-})
+});
 
-router.patch('/',async(req,res)=>{
-    req.on('end', async()=>{
+router.patch('/:id',async(req,res)=>{
         try {
-            const data =JSON.parse(body);
-
-            const id = req.url.split('/').pop();
-            const postCheckResult = await postModel.findById(id)
-
-            if (!postCheckResult) {
-                return appError(httpStatus.BAD_REQUEST, "找不到此貼文", next);
-            } 
+            const data =req.body;
 
             if (!data) {
                 return appError(httpStatus.BAD_REQUEST, "請傳遞修改內容", next);
             }
 
             const newArticle= await postModel.findByIdAndUpdate(
-                id,
+                req.params.id,
             {
                 "articleContent":data.articleContent,
                 "articlePhoto":data.articlePhoto,
@@ -67,14 +57,15 @@ router.patch('/',async(req,res)=>{
             },{
                 new:true
             });
-
+            if (!newArticle) {
+                return appError(httpStatus.BAD_REQUEST, "找不到此貼文", next);
+            } 
 
             successHandle(res,httpStatus.OK,newArticle);
         } catch (error) {
             return appError(httpStatus.BAD_REQUEST, "修改貼文錯誤", next);
         }
-    });
-})
+});
 
 router.delete('/',async(req,res)=>{
     try {
