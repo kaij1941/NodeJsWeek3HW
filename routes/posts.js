@@ -14,7 +14,7 @@ router.get('/',async function(req,res){
     } 
 })
 
-router.post('/',async(req,res)=>{
+router.post('/',async(req,res,next)=>{
     
         try {
             const data = req.body;
@@ -39,7 +39,7 @@ router.post('/',async(req,res)=>{
         }
 });
 
-router.patch('/:id',async(req,res)=>{
+router.patch('/:id',async(req,res,next)=>{
         try {
             const data =req.body;
 
@@ -68,7 +68,7 @@ router.patch('/:id',async(req,res)=>{
         }
 });
 
-router.delete('/',async(req,res)=>{
+router.delete('/',async(req,res,next)=>{
     try {
         const newArticle= await postModel.deleteMany({});
         const afterDelete = await postModel.find() 
@@ -79,7 +79,7 @@ router.delete('/',async(req,res)=>{
     }
 })
 
-router.delete('/:id',async(req,res)=>{
+router.delete('/:id',async(req,res,next)=>{
     try {
         const id = req.url.split('/').pop();
  
