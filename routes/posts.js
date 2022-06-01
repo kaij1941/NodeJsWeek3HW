@@ -3,6 +3,7 @@ const router = express.Router();
 const postModel =require('../models/postModel');
 const successHandle=require('../service/successResponse');
 const httpStatus=require('../util/httpStatus');
+const appError = require("../service/appError");
 
 router.get('/',async function(req,res){
     try {
